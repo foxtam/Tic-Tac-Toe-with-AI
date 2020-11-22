@@ -1,5 +1,9 @@
 package tictactoe;
 
+import tictactoe.exceptions.CoordinatesOutOfBounds;
+import tictactoe.exceptions.InputIsNotANumbers;
+import tictactoe.exceptions.OccupiedException;
+
 public class Game {
 
     private final Field field;
@@ -15,7 +19,7 @@ public class Game {
     public void play() {
         while (gameState == GameState.NOT_FINISHED) {
             try {
-                Point point = Input.getPointFrom();
+                Point point = currentSign.getPlayer().getPointFrom(field);
                 field.mark(currentSign, point);
                 currentSign = currentSign.nextSign();
                 gameState = calculateGameState();

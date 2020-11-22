@@ -1,5 +1,7 @@
 package tictactoe;
 
+import tictactoe.exceptions.InputIsNotANumbers;
+
 import java.util.Scanner;
 
 public class Input {
@@ -10,8 +12,7 @@ public class Input {
         return scanner.nextLine();
     }
 
-    public static Point getPointFrom() {
-        System.out.print("Enter the coordinates: ");
+    public static Point getPoint() {
         String[] xy = scanner.nextLine().split("\\s+");
         try {
             return new Point(Integer.parseInt(xy[1]), Integer.parseInt(xy[0]));

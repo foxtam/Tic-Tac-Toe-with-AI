@@ -1,17 +1,32 @@
 package tictactoe;
 
+import tictactoe.players.EasyBot;
+import tictactoe.players.Human;
+
 public enum Sign {
-    X('X', PlayerType.HUMAN), O('O', PlayerType.BOT);
+    X('X', Human.INSTANCE), O('O', EasyBot.INSTANCE);
 
-    public final char sign;
-    public final PlayerType playerType;
+    private final char sign;
+    private Player player;
 
-    Sign(char sign, PlayerType playerType) {
+    Sign(char sign, Player player) {
         this.sign = sign;
-        this.playerType = playerType;
+        this.player = player;
+    }
+
+    public char getSign() {
+        return sign;
     }
 
     public Sign nextSign() {
         return this == X ? O : X;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

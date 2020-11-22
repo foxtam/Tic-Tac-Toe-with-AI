@@ -1,5 +1,8 @@
 package tictactoe;
 
+import tictactoe.exceptions.CoordinatesOutOfBounds;
+import tictactoe.exceptions.OccupiedException;
+
 public class Field {
 
     private static final char emptyCell = '_';
@@ -17,6 +20,10 @@ public class Field {
         this.size = size;
         field = new char[size][size];
         fillField(cells);
+    }
+
+    private char getCell(Point point) {
+        return field[size - point.row][point.column - 1];
     }
 
     private void checkSize(int size, String cells) {
@@ -49,7 +56,7 @@ public class Field {
         point = new Point(size - point.row, point.column - 1);
         checkOutOfBounds(point);
         checkOccupiedCell(point);
-        field[point.row][point.column] = sign.sign;
+        field[point.row][point.column] = sign.getSign();
     }
 
     private void checkOutOfBounds(Point point) {
@@ -90,7 +97,7 @@ public class Field {
         outer:
         for (char[] chars : field) {
             for (char aChar : chars) {
-                if (aChar != sign.sign) {
+                if (aChar != sign.getSign()) {
                     continue outer;
                 }
             }
@@ -103,7 +110,7 @@ public class Field {
         outer:
         for (int j = 0; j < size; j++) {
             for (int i = 0; i < size; i++) {
-                if (field[i][j] != sign.sign) {
+                if (field[i][j] != sign.getSign()) {
                     continue outer;
                 }
             }
@@ -114,7 +121,7 @@ public class Field {
 
     private boolean checkInARowMainDiagonal(Sign sign) {
         for (int i = 0; i < size; i++) {
-            if (field[i][i] != sign.sign) {
+            if (field[i][i] != sign.getSign()) {
                 return false;
             }
         }
@@ -123,7 +130,7 @@ public class Field {
 
     private boolean checkInARowOtherDiagonal(Sign sign) {
         for (int i = 0; i < size; i++) {
-            if (field[i][size - i - 1] != sign.sign) {
+            if (field[i][size - i - 1] != sign.getSign()) {
                 return false;
             }
         }
@@ -142,7 +149,7 @@ public class Field {
         int count = 0;
         for (char[] chars : field) {
             for (char aChar : chars) {
-                if (aChar == sign.sign) {
+                if (aChar == sign.getSign()) {
                     count++;
                 }
             }
@@ -170,5 +177,9 @@ public class Field {
         }
         builder.append('\n').append("-".repeat(length));
         return builder.toString();
+    }
+
+    public boolean isEmptyCell(Point point) {
+        return getCell(point) == emptyCell;
     }
 }

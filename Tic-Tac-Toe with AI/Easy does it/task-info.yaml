@@ -642,18 +642,22 @@ files:
         }
     }
   learner_created: true
-- name: src/tictactoe/PlayerType.java
-  visible: true
-  learner_created: true
 - name: src/tictactoe/Bot.java
   visible: true
   learner_created: true
-- name: src/tictactoe/EasyBot.java
+- name: src/tictactoe/Player.java
+  visible: true
+  learner_created: true
+- name: src/tictactoe/players/Human.java
+  visible: true
+  learner_created: true
+- name: src/tictactoe/players/EasyBot.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/81/stages/448/implement#comment
-status: Failed
+status: Solved
 feedback:
-  message: Compilation Failed
-  time: Sun, 22 Nov 2020 10:18:06 UTC
-record: -1
+  message: Congratulations! Continue on <a href="https://hyperskill.org/projects/81/stages/448/implement">JetBrains
+    Academy</a>
+  time: Sun, 22 Nov 2020 11:18:23 UTC
+record: 2
