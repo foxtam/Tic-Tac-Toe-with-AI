@@ -6,6 +6,10 @@ public class Field {
     private final char[][] field;
     private final int size;
 
+    public Field(int size) {
+        this(size, String.valueOf(emptyCell).repeat(size * size));
+    }
+
     public Field(int size, String cells) {
         cells = cells.toUpperCase();
         checkSize(size, cells);

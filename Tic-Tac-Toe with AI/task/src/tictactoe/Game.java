@@ -7,31 +7,28 @@ public class Game {
     private Sign currentSign;
 
     public Game(int fieldSize) {
-        this.field = new Field(fieldSize, Input.getCells());
+        this.field = new Field(fieldSize);
         this.currentSign = field.countO() < field.countX() ? Sign.O : Sign.X;
         Output.println(field.toString());
     }
 
     public void play() {
-//        while (gameState == GameState.NOT_FINISHED) {
-        try {
-            Point point = Input.getPoint();
-            field.mark(currentSign, point);
-            currentSign = currentSign.nextSign();
-            gameState = calculateGameState();
-            Output.println(field.toString());
-            printGameStatus();
-        } catch (OccupiedException e) {
-            System.out.println("This cell is occupied! Choose another one!");
-            play();
-        } catch (InputIsNotANumbers e) {
-            System.out.println("You should enter numbers!");
-            play();
-        } catch (CoordinatesOutOfBounds e) {
-            System.out.printf("Coordinates should be from 1 to %d!%n", field.getSize());
-            play();
+        while (gameState == GameState.NOT_FINISHED) {
+            try {
+                Point point = Input.getPointFrom();
+                field.mark(currentSign, point);
+                currentSign = currentSign.nextSign();
+                gameState = calculateGameState();
+                Output.println(field.toString());
+            } catch (OccupiedException e) {
+                System.out.println("This cell is occupied! Choose another one!");
+            } catch (InputIsNotANumbers e) {
+                System.out.println("You should enter numbers!");
+            } catch (CoordinatesOutOfBounds e) {
+                System.out.printf("Coordinates should be from 1 to %d!%n", field.getSize());
+            }
         }
-//        }
+        printGameStatus();
     }
 
     private GameState calculateGameState() {

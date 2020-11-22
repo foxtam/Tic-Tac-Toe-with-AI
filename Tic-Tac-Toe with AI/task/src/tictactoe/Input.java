@@ -10,7 +10,7 @@ public class Input {
         return scanner.nextLine();
     }
 
-    public static Point getPoint() {
+    public static Point getPointFrom() {
         System.out.print("Enter the coordinates: ");
         String[] xy = scanner.nextLine().split("\\s+");
         try {
