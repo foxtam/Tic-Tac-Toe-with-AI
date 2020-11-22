@@ -3,6 +3,7 @@ package tictactoe;
 import tictactoe.exceptions.CoordinatesOutOfBounds;
 import tictactoe.exceptions.InputIsNotANumbers;
 import tictactoe.exceptions.OccupiedException;
+import tictactoe.io.Output;
 
 public class Game {
 

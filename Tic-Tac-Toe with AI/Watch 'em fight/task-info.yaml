@@ -552,31 +552,6 @@ files:
         }
     }
   learner_created: true
-- name: src/tictactoe/Input.java
-  visible: true
-  text: |
-    package tictactoe;
-
-    import java.util.Scanner;
-
-    public class Input {
-        public static final Scanner scanner = new Scanner(System.in);
-
-        public static String getCells() {
-            System.out.print("Enter cells: ");
-            return scanner.nextLine();
-        }
-
-        public static Point getPoint() {
-            String[] xy = scanner.nextLine().split("\\s+");
-            try {
-                return new Point(Integer.parseInt(xy[1]), Integer.parseInt(xy[0]));
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                throw new InputIsNotANumbers();
-            }
-        }
-    }
-  learner_created: true
 - name: src/tictactoe/GameState.java
   visible: true
   text: |
@@ -584,15 +559,6 @@ files:
 
     public enum GameState {
         NOT_FINISHED, DRAW, X_WINS, O_WINS
-    }
-  learner_created: true
-- name: src/tictactoe/Player.java
-  visible: true
-  text: |
-    package tictactoe;
-
-    public interface Player {
-        Point getPointFrom(Field field);
     }
   learner_created: true
 - name: src/tictactoe/Game.java
@@ -722,18 +688,6 @@ files:
         }
     }
   learner_created: true
-- name: src/tictactoe/Output.java
-  visible: true
-  text: |
-    package tictactoe;
-
-    public class Output {
-
-        public static void println(String string) {
-            System.out.println(string);
-        }
-    }
-  learner_created: true
 - name: src/tictactoe/Bot.java
   visible: true
   text: |
@@ -779,6 +733,52 @@ files:
   learner_created: true
 - name: src/tictactoe/exceptions/InputIsNotANumbers.java
   visible: true
+  learner_created: true
+- name: src/tictactoe/players/Player.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    public interface Player {
+        Point getPointFrom(Field field);
+    }
+  learner_created: true
+- name: src/tictactoe/io/Input.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    import java.util.Scanner;
+
+    public class Input {
+        public static final Scanner scanner = new Scanner(System.in);
+
+        public static String getCells() {
+            System.out.print("Enter cells: ");
+            return scanner.nextLine();
+        }
+
+        public static Point getPoint() {
+            String[] xy = scanner.nextLine().split("\\s+");
+            try {
+                return new Point(Integer.parseInt(xy[1]), Integer.parseInt(xy[0]));
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                throw new InputIsNotANumbers();
+            }
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/io/Output.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    public class Output {
+
+        public static void println(String string) {
+            System.out.println(string);
+        }
+    }
   learner_created: true
 feedback_link: https://hyperskill.org/projects/81/stages/449/implement#comment
 status: Solved

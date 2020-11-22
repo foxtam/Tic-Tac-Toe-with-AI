@@ -1,5 +1,6 @@
-package tictactoe;
+package tictactoe.io;
 
+import tictactoe.Point;
 import tictactoe.exceptions.InputIsNotANumbers;
 
 import java.util.Scanner;

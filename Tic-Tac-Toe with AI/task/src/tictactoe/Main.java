@@ -1,7 +1,10 @@
 package tictactoe;
 
 import tictactoe.exceptions.WrongGameSettingsInput;
-import tictactoe.inputsettings.*;
+import tictactoe.inputsettings.ExitGame;
+import tictactoe.inputsettings.GameCommand;
+import tictactoe.inputsettings.StartGame;
+import tictactoe.io.Input;
 
 public class Main {
 

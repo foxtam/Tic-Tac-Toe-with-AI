@@ -1,8 +1,7 @@
 package tictactoe.players;
 
 import tictactoe.Field;
-import tictactoe.Input;
-import tictactoe.Player;
+import tictactoe.io.Input;
 import tictactoe.Point;
 
 public class Human implements Player {

@@ -1,7 +1,7 @@
 package tictactoe.inputsettings;
 
 
-import tictactoe.Player;
+import tictactoe.players.Player;
 import tictactoe.exceptions.WrongGameSettingsInput;
 
 public interface GameCommand {

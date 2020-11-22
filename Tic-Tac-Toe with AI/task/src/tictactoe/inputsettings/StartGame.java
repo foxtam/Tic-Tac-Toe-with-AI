@@ -1,6 +1,6 @@
 package tictactoe.inputsettings;
 
-import tictactoe.Player;
+import tictactoe.players.Player;
 
 public class StartGame implements GameCommand {
     public static final String stringCommand = "start";

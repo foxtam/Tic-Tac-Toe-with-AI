@@ -1,7 +1,6 @@
 package tictactoe.players;
 
 import tictactoe.Field;
-import tictactoe.Player;
 import tictactoe.Point;
 
 public class EasyBot implements Player {

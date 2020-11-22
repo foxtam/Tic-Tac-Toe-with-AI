@@ -2,6 +2,7 @@ package tictactoe;
 
 import tictactoe.players.EasyBot;
 import tictactoe.players.Human;
+import tictactoe.players.Player;
 
 public enum Sign {
     X('X', Human.INSTANCE), O('O', EasyBot.INSTANCE);

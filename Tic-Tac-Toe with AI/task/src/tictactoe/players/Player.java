@@ -1,7 +1,7 @@
-package tictactoe;
+package tictactoe.players;
 
-import tictactoe.players.EasyBot;
-import tictactoe.players.Human;
+import tictactoe.Field;
+import tictactoe.Point;
 
 public interface Player {
     static Player fromString(String player) {
