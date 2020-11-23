@@ -5,14 +5,12 @@ import tictactoe.players.Human;
 import tictactoe.players.Player;
 
 public enum Sign {
-    X('X', Human.INSTANCE), O('O', EasyBot.INSTANCE);
+    X('X'), O('O');
 
     private final char sign;
-    private Player player;
 
-    Sign(char sign, Player player) {
+    Sign(char sign) {
         this.sign = sign;
-        this.player = player;
     }
 
     public char getSign() {
@@ -21,13 +19,5 @@ public enum Sign {
 
     public Sign nextSign() {
         return this == X ? O : X;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 }

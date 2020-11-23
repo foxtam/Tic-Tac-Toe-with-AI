@@ -4,25 +4,29 @@ import tictactoe.exceptions.CoordinatesOutOfBounds;
 import tictactoe.exceptions.InputIsNotANumbers;
 import tictactoe.exceptions.OccupiedException;
 import tictactoe.io.Output;
+import tictactoe.players.Player;
+import tictactoe.players.PlayersQueue;
 
 public class Game {
 
     private final Field field;
     private GameState gameState = GameState.NOT_FINISHED;
-    private Sign currentSign;
+    private final PlayersQueue playersQueue;
+    private Player currentPlayer;
 
-    public Game(int fieldSize) {
+    public Game(int fieldSize, Player... players) {
         this.field = new Field(fieldSize);
-        this.currentSign = field.countO() < field.countX() ? Sign.O : Sign.X;
+        this.playersQueue = new PlayersQueue(players);
+        this.currentPlayer = playersQueue.next();
         Output.println(field.toString());
     }
 
     public void play() {
         while (gameState == GameState.NOT_FINISHED) {
             try {
-                Point point = currentSign.getPlayer().getPointFrom(field);
-                field.mark(currentSign, point);
-                currentSign = currentSign.nextSign();
+                Point point = currentPlayer.getPointToMark(field);
+                field.mark(currentPlayer.getSign(), point);
+                currentPlayer = playersQueue.next();
                 gameState = calculateGameState();
                 Output.println(field.toString());
             } catch (OccupiedException e) {

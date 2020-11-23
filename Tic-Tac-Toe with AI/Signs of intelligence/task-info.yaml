@@ -300,6 +300,605 @@ files:
         }
     }
   learner_created: false
+- name: src/tictactoe/Field.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    import tictactoe.exceptions.CoordinatesOutOfBounds;
+    import tictactoe.exceptions.OccupiedException;
+
+    public class Field {
+
+        private static final char emptyCell = '_';
+        private final char[][] field;
+        private final int size;
+
+        public Field(int size) {
+            this(size, String.valueOf(emptyCell).repeat(size * size));
+        }
+
+        public Field(int size, String cells) {
+            cells = cells.toUpperCase();
+            checkSize(size, cells);
+            checkCellsChars(cells);
+            this.size = size;
+            field = new char[size][size];
+            fillField(cells);
+        }
+
+        private char getCell(Point point) {
+            return field[size - point.row][point.column - 1];
+        }
+
+        private void checkSize(int size, String cells) {
+            if (size * size != cells.length()) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        private void checkCellsChars(String cells) {
+            for (char ch : cells.toCharArray()) {
+                if ("XO_".indexOf(ch) == -1) {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
+
+        private void fillField(String cells) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    field[i][j] = cells.charAt(i * size + j);
+                }
+            }
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void mark(Sign sign, Point point) {
+            point = new Point(size - point.row, point.column - 1);
+            checkOutOfBounds(point);
+            checkOccupiedCell(point);
+            field[point.row][point.column] = sign.getSign();
+        }
+
+        private void checkOutOfBounds(Point point) {
+            if (Math.min(point.row, point.column) < 0 || Math.max(point.row, point.column) >= size) {
+                throw new CoordinatesOutOfBounds();
+            }
+        }
+
+        private void checkOccupiedCell(Point point) {
+            if (field[point.row][point.column] != emptyCell) {
+                throw new OccupiedException();
+            }
+        }
+
+        public boolean hasEmptyCell() {
+            for (char[] chars : field) {
+                for (char aChar : chars) {
+                    if (aChar == emptyCell) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean isOInARow() {
+            return isSignInARow(Sign.O);
+        }
+
+        private boolean isSignInARow(Sign sign) {
+            if (checkInARowRows(sign)) return true;
+            if (checkInARowColumns(sign)) return true;
+            if (checkInARowMainDiagonal(sign)) return true;
+            return checkInARowOtherDiagonal(sign);
+        }
+
+        private boolean checkInARowRows(Sign sign) {
+            outer:
+            for (char[] chars : field) {
+                for (char aChar : chars) {
+                    if (aChar != sign.getSign()) {
+                        continue outer;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private boolean checkInARowColumns(Sign sign) {
+            outer:
+            for (int j = 0; j < size; j++) {
+                for (int i = 0; i < size; i++) {
+                    if (field[i][j] != sign.getSign()) {
+                        continue outer;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private boolean checkInARowMainDiagonal(Sign sign) {
+            for (int i = 0; i < size; i++) {
+                if (field[i][i] != sign.getSign()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean checkInARowOtherDiagonal(Sign sign) {
+            for (int i = 0; i < size; i++) {
+                if (field[i][size - i - 1] != sign.getSign()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean isXInARow() {
+            return isSignInARow(Sign.X);
+        }
+
+        public int countX() {
+            return countSign(Sign.X);
+        }
+
+        private int countSign(Sign sign) {
+            int count = 0;
+            for (char[] chars : field) {
+                for (char aChar : chars) {
+                    if (aChar == sign.getSign()) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        public int countO() {
+            return countSign(Sign.O);
+        }
+
+        @Override
+        public String toString() {
+            int length = 9;
+            StringBuilder builder = new StringBuilder("-".repeat(length));
+            for (char[] chars : field) {
+                builder.append("\n| ");
+                for (char aChar : chars) {
+                    if (aChar == emptyCell) {
+                        aChar = ' ';
+                    }
+                    builder.append(aChar).append(" ");
+                }
+                builder.append("|");
+            }
+            builder.append('\n').append("-".repeat(length));
+            return builder.toString();
+        }
+
+        public boolean isEmptyCell(Point point) {
+            return getCell(point) == emptyCell;
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/players/EasyBot.java
+  visible: true
+  text: |
+    package tictactoe.players;
+
+    import tictactoe.Field;
+    import tictactoe.Point;
+    import tictactoe.Sign;
+
+    public class EasyBot extends Player {
+
+        EasyBot(Sign sign) {
+            super(sign);
+        }
+
+        @Override
+        public Point getPointToMark(Field field) {
+            System.out.println("Making move level \"easy\"");
+            Point randomPoint = null;
+            int count = 0;
+            for (int i = 1; i <= field.getSize(); i++) {
+                for (int j = 1; j <= field.getSize(); j++) {
+                    if (field.isEmptyCell(new Point(i, j))) {
+                        count++;
+                        if (Math.random() < 1.0 / count) {
+                            randomPoint = new Point(i, j);
+                        }
+                    }
+                }
+            }
+            assert count > 0;
+            assert randomPoint != null;
+            return randomPoint;
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/exceptions/OccupiedException.java
+  visible: true
+  text: |+
+    package tictactoe.exceptions;
+
+    import tictactoe.exceptions.TicTakToeException;
+
+    public class OccupiedException extends TicTakToeException {
+    }
+
+  learner_created: true
+- name: src/tictactoe/io/Output.java
+  visible: true
+  text: |
+    package tictactoe.io;
+
+    public class Output {
+
+        public static void println(String string) {
+            System.out.println(string);
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/io/Input.java
+  visible: true
+  text: |
+    package tictactoe.io;
+
+    import tictactoe.Point;
+    import tictactoe.exceptions.InputIsNotANumbers;
+
+    import java.util.Scanner;
+
+    public class Input {
+        public static final Scanner scanner = new Scanner(System.in);
+
+        public static String getCells() {
+            System.out.print("Enter cells: ");
+            return scanner.nextLine();
+        }
+
+        public static Point getPoint() {
+            String[] xy = scanner.nextLine().split("\\s+");
+            try {
+                return new Point(Integer.parseInt(xy[1]), Integer.parseInt(xy[0]));
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                throw new InputIsNotANumbers();
+            }
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/players/Human.java
+  visible: true
+  text: |
+    package tictactoe.players;
+
+    import tictactoe.Field;
+    import tictactoe.Sign;
+    import tictactoe.io.Input;
+    import tictactoe.Point;
+
+    public class Human extends Player {
+
+        Human(Sign sign) {
+            super(sign);
+        }
+
+        @Override
+        public Point getPointToMark(Field field) {
+            System.out.print("Enter the coordinates: ");
+            return Input.getPoint();
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/inputsettings/StartGame.java
+  visible: true
+  text: |
+    package tictactoe.inputsettings;
+
+    import tictactoe.players.Player;
+
+    public class StartGame implements GameCommand {
+        public static final String stringCommand = "start";
+
+        private final Player xPlayer;
+        private final Player oPlayer;
+
+        public StartGame(Player xPlayer, Player oPlayer) {
+            this.xPlayer = xPlayer;
+            this.oPlayer = oPlayer;
+        }
+
+        public Player getXPlayer() {
+            return xPlayer;
+        }
+
+        public Player getOPlayer() {
+            return oPlayer;
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/GameState.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    public enum GameState {
+        NOT_FINISHED, DRAW, X_WINS, O_WINS
+    }
+  learner_created: true
+- name: src/tictactoe/players/Player.java
+  visible: true
+  text: |
+    package tictactoe.players;
+
+    import tictactoe.Field;
+    import tictactoe.Point;
+    import tictactoe.Sign;
+
+    public abstract class Player {
+
+        private final Sign sign;
+
+        protected Player(Sign sign) {
+            this.sign = sign;
+        }
+
+        public static Player fromStringWithSign(String player, Sign sign) {
+            switch (player) {
+                case "user":
+                    return new Human(sign);
+                case "easy":
+                    return new EasyBot(sign);
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+
+        public Sign getSign() {
+            return sign;
+        }
+
+        public abstract Point getPointToMark(Field field);
+    }
+  learner_created: true
+- name: src/tictactoe/exceptions/BadParametersException.java
+  visible: true
+  text: |
+    package tictactoe.exceptions;
+
+    public class BadParametersException extends TicTakToeException {
+    }
+  learner_created: true
+- name: src/tictactoe/inputsettings/ExitGame.java
+  visible: true
+  text: |
+    package tictactoe.inputsettings;
+
+    public class ExitGame implements GameCommand {
+        public static final String stringCommand = "exit";
+    }
+  learner_created: true
+- name: src/tictactoe/inputsettings/GameCommand.java
+  visible: true
+  text: |
+    package tictactoe.inputsettings;
+
+
+    import tictactoe.Sign;
+    import tictactoe.exceptions.BadParametersException;
+    import tictactoe.players.Player;
+
+    public interface GameCommand {
+
+        static GameCommand getGameCommandFrom(String fullCommand) {
+            try {
+                String[] parts = fullCommand.split("\\s+");
+                if (parts[0].equals(StartGame.stringCommand)) {
+                    return new StartGame(
+                            Player.fromStringWithSign(parts[1], Sign.X),
+                            Player.fromStringWithSign(parts[2], Sign.O));
+                } else if (parts[0].equals(ExitGame.stringCommand)) {
+                    return new ExitGame();
+                } else {
+                    throw new BadParametersException();
+                }
+            } catch (IndexOutOfBoundsException e) {
+                throw new BadParametersException();
+            }
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/Game.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    import tictactoe.exceptions.CoordinatesOutOfBounds;
+    import tictactoe.exceptions.InputIsNotANumbers;
+    import tictactoe.exceptions.OccupiedException;
+    import tictactoe.io.Output;
+    import tictactoe.players.Player;
+    import tictactoe.players.PlayersQueue;
+
+    public class Game {
+
+        private final Field field;
+        private GameState gameState = GameState.NOT_FINISHED;
+        private final PlayersQueue playersQueue;
+        private Player currentPlayer;
+
+        public Game(int fieldSize, Player... players) {
+            this.field = new Field(fieldSize);
+            this.playersQueue = new PlayersQueue(players);
+            this.currentPlayer = playersQueue.next();
+            Output.println(field.toString());
+        }
+
+        public void play() {
+            while (gameState == GameState.NOT_FINISHED) {
+                try {
+                    Point point = currentPlayer.getPointToMark(field);
+                    field.mark(currentPlayer.getSign(), point);
+                    currentPlayer = playersQueue.next();
+                    gameState = calculateGameState();
+                    Output.println(field.toString());
+                } catch (OccupiedException e) {
+                    System.out.println("This cell is occupied! Choose another one!");
+                } catch (InputIsNotANumbers e) {
+                    System.out.println("You should enter numbers!");
+                } catch (CoordinatesOutOfBounds e) {
+                    System.out.printf("Coordinates should be from 1 to %d!%n", field.getSize());
+                }
+            }
+            printGameStatus();
+        }
+
+        private GameState calculateGameState() {
+            if (field.isOInARow()) {
+                return GameState.O_WINS;
+            } else if (field.isXInARow()) {
+                return GameState.X_WINS;
+            } else if (field.hasEmptyCell()) {
+                return GameState.NOT_FINISHED;
+            } else {
+                return GameState.DRAW;
+            }
+        }
+
+        private void printGameStatus() {
+            switch (gameState) {
+                case X_WINS:
+                    Output.println("X wins");
+                    break;
+                case O_WINS:
+                    Output.println("O wins");
+                    break;
+                case DRAW:
+                    Output.println("Draw");
+                    break;
+                case NOT_FINISHED:
+                    Output.println("Game not finished");
+            }
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/exceptions/TicTakToeException.java
+  visible: true
+  text: |
+    package tictactoe.exceptions;
+
+    public class TicTakToeException extends RuntimeException {
+    }
+  learner_created: true
+- name: src/tictactoe/exceptions/CoordinatesOutOfBounds.java
+  visible: true
+  text: |
+    package tictactoe.exceptions;
+
+    public class CoordinatesOutOfBounds extends TicTakToeException {
+    }
+  learner_created: true
+- name: src/tictactoe/Point.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    import java.util.Objects;
+
+    public class Point {
+        final int row;
+        final int column;
+
+        public Point(int row, int column) {
+            this.row = row;
+            this.column = column;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Point point = (Point) o;
+            return row == point.row &&
+                    column == point.column;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(row, column);
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/Sign.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    import tictactoe.players.EasyBot;
+    import tictactoe.players.Human;
+    import tictactoe.players.Player;
+
+    public enum Sign {
+        X('X'), O('O');
+
+        private final char sign;
+
+        Sign(char sign) {
+            this.sign = sign;
+        }
+
+        public char getSign() {
+            return sign;
+        }
+
+        public Sign nextSign() {
+            return this == X ? O : X;
+        }
+    }
+  learner_created: true
+- name: src/tictactoe/exceptions/InputIsNotANumbers.java
+  visible: true
+  text: |
+    package tictactoe.exceptions;
+
+    public class InputIsNotANumbers extends TicTakToeException {
+    }
+  learner_created: true
+- name: src/tictactoe/players/PlayersQueue.java
+  visible: true
+  text: |
+    package tictactoe.players;
+
+    import java.util.Arrays;
+
+    public class PlayersQueue {
+        private final Player[] players;
+        private int nextPlayerIndex = 0;
+
+        public PlayersQueue(Player[] players) {
+            this.players = Arrays.copyOf(players, players.length);
+            if (players.length < 2) {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        public Player next() {
+            if(nextPlayerIndex == players.length) {
+                nextPlayerIndex = 0;
+            }
+            return players[nextPlayerIndex++];
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/81/stages/450/implement#comment
 status: Unchecked
 record: -1

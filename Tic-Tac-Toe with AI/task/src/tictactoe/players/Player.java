@@ -2,18 +2,30 @@ package tictactoe.players;
 
 import tictactoe.Field;
 import tictactoe.Point;
+import tictactoe.Sign;
 
-public interface Player {
-    static Player fromString(String player) {
+public abstract class Player {
+
+    private final Sign sign;
+
+    protected Player(Sign sign) {
+        this.sign = sign;
+    }
+
+    public static Player fromStringWithSign(String player, Sign sign) {
         switch (player) {
             case "user":
-                return Human.INSTANCE;
+                return new Human(sign);
             case "easy":
-                return EasyBot.INSTANCE;
+                return new EasyBot(sign);
             default:
                 throw new IllegalArgumentException();
         }
     }
 
-    Point getPointFrom(Field field);
+    public Sign getSign() {
+        return sign;
+    }
+
+    public abstract Point getPointToMark(Field field);
 }

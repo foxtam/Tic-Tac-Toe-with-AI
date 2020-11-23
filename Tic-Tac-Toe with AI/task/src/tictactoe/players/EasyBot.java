@@ -2,16 +2,16 @@ package tictactoe.players;
 
 import tictactoe.Field;
 import tictactoe.Point;
+import tictactoe.Sign;
 
-public class EasyBot implements Player {
+public class EasyBot extends Player {
 
-    public static final EasyBot INSTANCE = new EasyBot();
-
-    private EasyBot() {
+    EasyBot(Sign sign) {
+        super(sign);
     }
 
     @Override
-    public Point getPointFrom(Field field) {
+    public Point getPointToMark(Field field) {
         System.out.println("Making move level \"easy\"");
         Point randomPoint = null;
         int count = 0;

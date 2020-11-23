@@ -1,6 +1,6 @@
 package tictactoe;
 
-import tictactoe.exceptions.WrongGameSettingsInput;
+import tictactoe.exceptions.BadParametersException;
 import tictactoe.inputsettings.ExitGame;
 import tictactoe.inputsettings.GameCommand;
 import tictactoe.inputsettings.StartGame;
@@ -16,13 +16,11 @@ public class Main {
                     break;
                 } else if (command instanceof StartGame) {
                     StartGame startCommand = (StartGame) command;
-                    Sign.X.setPlayer(startCommand.getXPlayer());
-                    Sign.O.setPlayer(startCommand.getOPlayer());
-                    new Game(3).play();
+                    new Game(3, startCommand.getXPlayer(), startCommand.getOPlayer()).play();
                 } else {
-                    throw new IllegalArgumentException();
+                    throw new IllegalStateException();
                 }
-            } catch (WrongGameSettingsInput ignored) {
+            } catch (BadParametersException e) {
                 System.out.println("Bad parameters!");
             }
         }
