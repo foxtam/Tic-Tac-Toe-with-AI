@@ -4,14 +4,13 @@ import tictactoe.Field;
 import tictactoe.Point;
 import tictactoe.Sign;
 
-public class EasyBot extends Bot {
-
-    EasyBot(Sign sign) {
-        super(sign, "easy");
+public class MediumBot extends Bot {
+    public MediumBot(Sign sign) {
+        super(sign, "medium");
     }
 
     @Override
     public Point getPointToMark(Field field) {
-        return getRandomPointToMark(field);
+        
     }
 }

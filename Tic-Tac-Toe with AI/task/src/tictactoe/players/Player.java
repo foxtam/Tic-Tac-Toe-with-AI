@@ -18,6 +18,8 @@ public abstract class Player {
                 return new Human(sign);
             case "easy":
                 return new EasyBot(sign);
+            case "medium":
+                return new MediumBot(sign);
             default:
                 throw new IllegalArgumentException();
         }
@@ -28,4 +30,6 @@ public abstract class Player {
     }
 
     public abstract Point getPointToMark(Field field);
+
+    public abstract String getPlayerMessage();
 }

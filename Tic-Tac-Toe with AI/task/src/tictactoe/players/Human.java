@@ -13,7 +13,11 @@ public class Human extends Player {
 
     @Override
     public Point getPointToMark(Field field) {
-        System.out.print("Enter the coordinates: ");
         return Input.getPoint();
+    }
+
+    @Override
+    public String getPlayerMessage() {
+        return "Enter the coordinates: ";
     }
 }

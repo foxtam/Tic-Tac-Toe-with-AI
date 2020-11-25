@@ -10,8 +10,8 @@ import tictactoe.players.PlayersQueue;
 public class Game {
 
     private final Field field;
-    private GameState gameState = GameState.NOT_FINISHED;
     private final PlayersQueue playersQueue;
+    private GameState gameState = GameState.NOT_FINISHED;
     private Player currentPlayer;
 
     public Game(int fieldSize, Player... players) {
@@ -24,6 +24,7 @@ public class Game {
     public void play() {
         while (gameState == GameState.NOT_FINISHED) {
             try {
+                System.out.println(currentPlayer.getPlayerMessage());
                 Point point = currentPlayer.getPointToMark(field);
                 field.mark(currentPlayer.getSign(), point);
                 currentPlayer = playersQueue.next();
