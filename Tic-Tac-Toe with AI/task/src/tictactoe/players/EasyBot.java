@@ -6,7 +6,7 @@ import tictactoe.Sign;
 
 public class EasyBot extends Bot {
 
-    EasyBot(Sign sign) {
+    EasyBot(char sign) {
         super(sign, "easy");
     }
 

@@ -1,23 +1,10 @@
 package tictactoe;
 
-import tictactoe.players.EasyBot;
-import tictactoe.players.Human;
-import tictactoe.players.Player;
+public class Sign {
+    public static final char X = 'X';
+    public static final char O = 'O';
 
-public enum Sign {
-    X('X'), O('O');
-
-    private final char sign;
-
-    Sign(char sign) {
-        this.sign = sign;
-    }
-
-    public char getSign() {
-        return sign;
-    }
-
-    public Sign nextSign() {
-        return this == X ? O : X;
+    public static char nextSign(char sign) {
+        return sign == X ? O : X;
     }
 }

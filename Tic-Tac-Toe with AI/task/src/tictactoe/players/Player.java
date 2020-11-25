@@ -6,13 +6,13 @@ import tictactoe.Sign;
 
 public abstract class Player {
 
-    private final Sign sign;
+    private final char sign;
 
-    protected Player(Sign sign) {
+    protected Player(char sign) {
         this.sign = sign;
     }
 
-    public static Player fromStringWithSign(String player, Sign sign) {
+    public static Player fromStringWithSign(String player, char sign) {
         switch (player) {
             case "user":
                 return new Human(sign);
@@ -25,7 +25,7 @@ public abstract class Player {
         }
     }
 
-    public Sign getSign() {
+    public char getSign() {
         return sign;
     }
 

@@ -24,9 +24,9 @@ public class Game {
     public void play() {
         while (gameState == GameState.NOT_FINISHED) {
             try {
-                System.out.println(currentPlayer.getPlayerMessage());
+                Output.println(currentPlayer.getPlayerMessage());
                 Point point = currentPlayer.getPointToMark(field);
-                field.mark(currentPlayer.getSign(), point);
+                field.setCellSign(point, currentPlayer.getSign());
                 currentPlayer = playersQueue.next();
                 gameState = calculateGameState();
                 Output.println(field.toString());
@@ -35,16 +35,16 @@ public class Game {
             } catch (InputIsNotANumbers e) {
                 System.out.println("You should enter numbers!");
             } catch (CoordinatesOutOfBounds e) {
-                System.out.printf("Coordinates should be from 1 to %d!%n", field.getSize());
+                System.out.printf("Coordinates should be from 1 to %d!%n", field.size());
             }
         }
         printGameStatus();
     }
 
     private GameState calculateGameState() {
-        if (field.isOInARow()) {
+        if (isOInARow()) {
             return GameState.O_WINS;
-        } else if (field.isXInARow()) {
+        } else if (isXInARow()) {
             return GameState.X_WINS;
         } else if (field.hasEmptyCell()) {
             return GameState.NOT_FINISHED;
@@ -67,5 +67,46 @@ public class Game {
             case NOT_FINISHED:
                 Output.println("Game not finished");
         }
+    }
+
+    public boolean isXInARow() {
+        return isSignInARow(Sign.X);
+    }
+
+    private boolean isSignInARow(char sign) {
+        if (checkInARowRows(sign)) return true;
+        if (checkInARowColumns(sign)) return true;
+        if (checkInARowMainDiagonal(sign)) return true;
+        return checkInARowOtherDiagonal(sign);
+    }
+
+    private boolean checkInARowRows(char sign) {
+        for (int i = 1; i <= field.size(); i++) {
+            if (field.countSignsInRow(i, sign) == field.size()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkInARowColumns(char sign) {
+        for (int j = 1; j <= field.size(); j++) {
+            if (field.countSignsInColumn(j, sign) == field.size()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkInARowMainDiagonal(char sign) {
+        return field.countSignsMainDiagonal(sign) == field.size();
+    }
+
+    private boolean checkInARowOtherDiagonal(char sign) {
+        return field.countSignsOtherDiagonal(sign) == field.size();
+    }
+
+    public boolean isOInARow() {
+        return isSignInARow(Sign.O);
     }
 }

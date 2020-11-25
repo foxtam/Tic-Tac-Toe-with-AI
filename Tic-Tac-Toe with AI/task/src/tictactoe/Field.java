@@ -3,9 +3,11 @@ package tictactoe;
 import tictactoe.exceptions.CoordinatesOutOfBounds;
 import tictactoe.exceptions.OccupiedException;
 
+import java.util.Optional;
+
 public class Field {
 
-    private static final char emptyCell = '_';
+    public static final char emptyCell = '_';
     private final char[][] field;
     private final int size;
 
@@ -44,29 +46,6 @@ public class Field {
         }
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void mark(Sign sign, Point point) {
-        point = new Point(size - point.row, point.column - 1);
-        checkOutOfBounds(point);
-        checkOccupiedCell(point);
-        field[point.row][point.column] = sign.getSign();
-    }
-
-    private void checkOutOfBounds(Point point) {
-        if (Math.min(point.row, point.column) < 0 || Math.max(point.row, point.column) >= size) {
-            throw new CoordinatesOutOfBounds();
-        }
-    }
-
-    private void checkOccupiedCell(Point point) {
-        if (field[point.row][point.column] != emptyCell) {
-            throw new OccupiedException();
-        }
-    }
-
     public boolean hasEmptyCell() {
         for (char[] chars : field) {
             for (char aChar : chars) {
@@ -76,107 +55,6 @@ public class Field {
             }
         }
         return false;
-    }
-
-    public boolean isOInARow() {
-        return isSignInARow(Sign.O);
-    }
-
-    private boolean isSignInARow(Sign sign) {
-        if (checkInARowRows(sign)) return true;
-        if (checkInARowColumns(sign)) return true;
-        if (checkInARowMainDiagonal(sign)) return true;
-        return checkInARowOtherDiagonal(sign);
-    }
-
-    private boolean checkInARowRows(Sign sign) {
-        for (int i = 0; i < size; i++) {
-            if (countSignsInRow(i, sign) == size) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean checkInARowColumns(Sign sign) {
-        for (int j = 0; j < size; j++) {
-            if (countSignsInColumn(j, sign) == size) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean checkInARowMainDiagonal(Sign sign) {
-        return countSignsMainDiagonal(sign) == size;
-    }
-
-    private boolean checkInARowOtherDiagonal(Sign sign) {
-        return countSignsOtherDiagonal(sign) == size;
-    }
-
-    public int countSignsInRow(int row, Sign sign) {
-        int count = 0;
-        for (int j = 0; j < size; j++) {
-            if (field[row][j] == sign.getSign()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int countSignsInColumn(int column, Sign sign) {
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (field[i][column] == sign.getSign()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int countSignsMainDiagonal(Sign sign) {
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (field[i][i] == sign.getSign()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int countSignsOtherDiagonal(Sign sign) {
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (field[i][size - i - 1] == sign.getSign()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public boolean isXInARow() {
-        return isSignInARow(Sign.X);
-    }
-
-    public int countXInField() {
-        return countSignInField(Sign.X);
-    }
-
-    private int countSignInField(Sign sign) {
-        int count = 0;
-        for (char[] chars : field) {
-            for (char aChar : chars) {
-                if (aChar == sign.getSign()) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    public int countOInField() {
-        return countSignInField(Sign.O);
     }
 
     @Override
@@ -197,11 +75,120 @@ public class Field {
         return builder.toString();
     }
 
-    public boolean isEmptyCell(Point point) {
-        return getCell(point) == emptyCell;
+    public boolean isCellEmpty(Point point) {
+        return getCellSign(point) == emptyCell;
     }
 
-    private char getCell(Point point) {
-        return field[size - point.row][point.column - 1];
+    public char getCellSign(Point point) {
+        point = new Point(size - point.row, point.column - 1);
+        checkOutOfBounds(point);
+        return field[point.row][point.column];
+    }
+
+    private void checkOutOfBounds(Point point) {
+        if (Math.min(point.row, point.column) < 0 || Math.max(point.row, point.column) >= size) {
+            throw new CoordinatesOutOfBounds();
+        }
+    }
+
+    public void setCellSign(int row, int column, char sign) {
+        setCellSign(new Point(row, column), sign);
+    }
+
+    public void setCellSign(Point point, char sign) {
+        point = new Point(size - point.row, point.column - 1);
+        checkOutOfBounds(point);
+        checkOccupiedCell(point);
+        field[point.row][point.column] = sign;
+    }
+
+    private void checkOccupiedCell(Point point) {
+        if (field[point.row][point.column] != emptyCell) {
+            throw new OccupiedException();
+        }
+    }
+
+    public int countSignsInRow(int row, char sign) {
+        int count = 0;
+        for (int j = 1; j <= size(); j++) {
+            if (getCellSign(row, j) == sign) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public char getCellSign(int row, int column) {
+        return getCellSign(new Point(row, column));
+    }
+
+    public int countSignsInColumn(int column, char sign) {
+        int count = 0;
+        for (int i = 1; i <= size(); i++) {
+            if (getCellSign(i, column) == sign) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countSignsMainDiagonal(char sign) {
+        int count = 0;
+        for (int i = 1; i <= size(); i++) {
+            if (getCellSign(i, i) == sign) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int countSignsOtherDiagonal(char sign) {
+        int count = 0;
+        for (int i = 1; i <= size(); i++) {
+            if (getCellSign(i, size() - i + 1) == sign) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Optional<Integer> getEmptyCellColumnIndexInRow(int i) {
+        for (int j = 1; j <= size; j++) {
+            if (getCellSign(i, j) == emptyCell) {
+                return Optional.of(j);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Integer> getEmptyCellRowIndexInColumn(int j) {
+        for (int i = 1; i <= size; i++) {
+            if (getCellSign(i, j) == emptyCell) {
+                return Optional.of(i);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Point> getEmptyCellPointMainDiagonal() {
+        for (int i = 1; i <= size; i++) {
+            if(getCellSign(i, i) == emptyCell) {
+                return Optional.of(new Point(i, i));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Point> getEmptyCellPointOtherDiagonal() {
+        for (int i = 1; i <= size; i++) {
+            if(getCellSign(i, size - i + 1) == emptyCell) {
+                return Optional.of(new Point(i, i));
+            }
+        }
+        return Optional.empty();
     }
 }

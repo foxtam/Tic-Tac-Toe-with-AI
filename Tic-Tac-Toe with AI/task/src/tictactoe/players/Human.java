@@ -7,7 +7,7 @@ import tictactoe.Point;
 
 public class Human extends Player {
 
-    Human(Sign sign) {
+    Human(char sign) {
         super(sign);
     }
 
