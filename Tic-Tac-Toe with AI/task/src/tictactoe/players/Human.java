@@ -1,7 +1,5 @@
 package tictactoe.players;
 
-import tictactoe.Field;
-import tictactoe.Sign;
 import tictactoe.io.Input;
 import tictactoe.Point;
 
@@ -12,7 +10,7 @@ public class Human extends Player {
     }
 
     @Override
-    public Point getPointToMark(Field field) {
+    public Point getPointToMark() {
         return Input.getPoint();
     }
 

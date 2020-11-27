@@ -1,8 +1,6 @@
 package tictactoe.players;
 
-import tictactoe.Field;
 import tictactoe.Point;
-import tictactoe.Sign;
 
 public class EasyBot extends Bot {
 
@@ -11,7 +9,7 @@ public class EasyBot extends Bot {
     }
 
     @Override
-    public Point getPointToMark(Field field) {
+    public Point getPointToMark() {
         return getRandomPointToMark(field);
     }
 }

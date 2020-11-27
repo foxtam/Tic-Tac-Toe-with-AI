@@ -12,7 +12,7 @@ public class MediumBot extends Bot {
     }
 
     @Override
-    public Point getPointToMark(Field field) {
+    public Point getPointToMark() {
         Optional<Point> point = checkInARowSign(field, getSign());
         if (point.isPresent()) {
             return point.get();

@@ -1,12 +1,14 @@
 package tictactoe.players;
 
 import tictactoe.Field;
+import tictactoe.Game;
 import tictactoe.Point;
-import tictactoe.Sign;
 
 public abstract class Player {
 
     private final char sign;
+    protected Field field;
+    protected Game game;
 
     protected Player(char sign) {
         this.sign = sign;
@@ -20,16 +22,27 @@ public abstract class Player {
                 return new EasyBot(sign);
             case "medium":
                 return new MediumBot(sign);
+            case "hard":
+                return new HardBot(sign);
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.field = game.getField();
+        this.game = game;
     }
 
     public char getSign() {
         return sign;
     }
 
-    public abstract Point getPointToMark(Field field);
+    public abstract Point getPointToMark();
 
     public abstract String getPlayerMessage();
 }

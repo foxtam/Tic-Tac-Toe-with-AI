@@ -13,23 +13,24 @@ public class Game {
     private final PlayersQueue playersQueue;
     private GameState gameState = GameState.NOT_FINISHED;
     private Player currentPlayer;
-
     public Game(int fieldSize, Player... players) {
         this.field = new Field(fieldSize);
+        for (Player player : players) {
+            player.setGame(this);
+        }
         this.playersQueue = new PlayersQueue(players);
         this.currentPlayer = playersQueue.next();
         Output.println(field.toString());
     }
 
+    public Field getField() {
+        return field;
+    }
+
     public void play() {
         while (gameState == GameState.NOT_FINISHED) {
             try {
-                Output.println(currentPlayer.getPlayerMessage());
-                Point point = currentPlayer.getPointToMark(field);
-                field.setCellSign(point, currentPlayer.getSign());
-                currentPlayer = playersQueue.next();
-                gameState = calculateGameState();
-                Output.println(field.toString());
+                playerTurn();
             } catch (OccupiedException e) {
                 System.out.println("This cell is occupied! Choose another one!");
             } catch (InputIsNotANumbers e) {
@@ -41,7 +42,16 @@ public class Game {
         printGameStatus();
     }
 
-    private GameState calculateGameState() {
+    public void playerTurn() {
+        Output.println(currentPlayer.getPlayerMessage());
+        Point point = currentPlayer.getPointToMark();
+        field.setCellSign(point, currentPlayer.getSign());
+        currentPlayer = playersQueue.next();
+        gameState = calculateGameState();
+        Output.println(field.toString());
+    }
+
+    public GameState calculateGameState() {
         if (isOInARow()) {
             return GameState.O_WINS;
         } else if (isXInARow()) {
@@ -73,7 +83,7 @@ public class Game {
         return isSignInARow(Sign.X);
     }
 
-    private boolean isSignInARow(char sign) {
+    public boolean isSignInARow(char sign) {
         if (checkInARowRows(sign)) return true;
         if (checkInARowColumns(sign)) return true;
         if (checkInARowMainDiagonal(sign)) return true;

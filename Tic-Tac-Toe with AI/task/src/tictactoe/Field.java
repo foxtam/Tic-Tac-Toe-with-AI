@@ -95,10 +95,20 @@ public class Field {
         setCellSign(new Point(row, column), sign);
     }
 
+    public void setHardCellSign(int row, int column, char sign) {
+        setHardCellSign(new Point(row, column), sign);
+    }
+
     public void setCellSign(Point point, char sign) {
         point = new Point(size - point.row, point.column - 1);
         checkOutOfBounds(point);
         checkOccupiedCell(point);
+        field[point.row][point.column] = sign;
+    }
+
+    public void setHardCellSign(Point point, char sign) {
+        point = new Point(size - point.row, point.column - 1);
+        checkOutOfBounds(point);
         field[point.row][point.column] = sign;
     }
 
@@ -186,7 +196,7 @@ public class Field {
     public Optional<Point> getEmptyCellPointOtherDiagonal() {
         for (int i = 1; i <= size; i++) {
             if(getCellSign(i, size - i + 1) == emptyCell) {
-                return Optional.of(new Point(i, i));
+                return Optional.of(new Point(i, size - i + 1));
             }
         }
         return Optional.empty();
