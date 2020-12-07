@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/262721/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Fri, 27 Nov 2020 17:20:06 UTC
+update_date: Mon, 07 Dec 2020 08:51:50 UTC
 stages:
 - id: 447
   step: 7434
@@ -19,7 +19,7 @@ stages:
   is_completed: true
 - id: 451
   step: 7438
-  is_completed: false
+  is_completed: true
 topics:
   0:
   - title: Units of information

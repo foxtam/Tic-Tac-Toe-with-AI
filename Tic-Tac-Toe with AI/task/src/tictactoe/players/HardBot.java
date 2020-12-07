@@ -12,48 +12,48 @@ public class HardBot extends Bot {
 
     @Override
     public Point getPointToMark() {
-        int bestScore = Integer.MIN_VALUE;
-        Point bestPoint = null;
-        for (int i = 1; i <= field.size(); i++) {
-            for (int j = 1; j <= field.size(); j++) {
-                if (field.getCellSign(i, j) == Field.emptyCell) {
-                    final Point point = new Point(i, j);
-                    field.setCellSign(point, getSign());
-                    int score = calculateMinimaxScore(field, Sign.nextSign(getSign()));
-                    field.setHardCellSign(point, Field.emptyCell);
-                    if (score > bestScore) {
-                        bestPoint = point;
-                        bestScore = score;
-                    }
-                }
-            }
-        }
-        return bestPoint;
+        return calculateMinimaxScore(field, getSign()).point;
     }
 
-    private int calculateMinimaxScore(Field field, char sign) {
+    private PointScorePair calculateMinimaxScore(Field field, char sign) {
         if (game.isSignInARow(getSign())) {
-            return 1;
+            return new PointScorePair(null, 1);
         } else if (game.isSignInARow(Sign.nextSign(getSign()))) {
-            return -1;
+            return new PointScorePair(null, -1);
         } else if (!field.hasEmptyCell()) {
-            return 0;
+            return new PointScorePair(null, 0);
         } else {
             return getScore(field, sign);
         }
     }
 
-    private int getScore(Field field, char sign) {
-        int score = 0;
+    private PointScorePair getScore(Field field, char sign) {
+        int bestScore = Integer.MIN_VALUE;
+        Point bestPoint = null;
+
         for (int i = 1; i <= field.size(); i++) {
             for (int j = 1; j <= field.size(); j++) {
                 if (field.getCellSign(i, j) == Field.emptyCell) {
                     field.setCellSign(i, j, sign);
-                    score += calculateMinimaxScore(field, Sign.nextSign(sign));
+                    PointScorePair pointScore = calculateMinimaxScore(field, Sign.nextSign(sign));
+                    if (pointScore.score > bestScore) {
+                        bestScore = pointScore.score;
+                        bestPoint = new Point(i, j);
+                    }
                     field.setHardCellSign(i, j, Field.emptyCell);
                 }
             }
         }
-        return score;
+        return new PointScorePair(bestPoint, bestScore);
+    }
+}
+
+class PointScorePair {
+    public final Point point;
+    public final int score;
+
+    public PointScorePair(Point point, int score) {
+        this.point = point;
+        this.score = score;
     }
 }
